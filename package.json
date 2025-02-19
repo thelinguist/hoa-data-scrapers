@@ -1,0 +1,20 @@
+{
+  "name": "hoa-data-scrapers",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "playwright test"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.50.1",
+    "@types/node": "^22.13.4",
+    "@types/papaparse": "^5.3.15"
+  },
+  "dependencies": {
+    "papaparse": "^5.5.2",
+    "node-html-parser": "^6.1.5"
+  }
+}
