@@ -22,13 +22,13 @@ const getStreetType = (street: string) => {
   if (val) {
     return val
   }
-  else return "%25"
+  return "%25"
 }
 
 const getPropertyLink = async (xml: string) => {
   const doc = htmlParser(xml)
   const table = doc.querySelector("table")
-  const [header,dataRow] = table.querySelectorAll("tr")
+  const [,dataRow] = table.querySelectorAll("tr")
   const cells = dataRow.querySelectorAll("td")
   const link = cells[0].querySelector("a").getAttribute("href")
   const prefix = "https://www.utahcounty.gov/LandRecords/"
@@ -55,6 +55,9 @@ const getDetails = async (link: string) => {
 
 export default async () => {
   const text = fs.readFileSync(file)
+  if (!fs.existsSync(outputFile)) {
+    fs.writeFileSync(outputFile, ["address", "owner", "ownerSince", "serial", "link"].join(",") + "\n")
+  }
   const csv = csvParser.parse(text.toString(), {header: true})
   const properties = {}
   await Promise.all(csv.data.map(async (row: AddressesCSVJSON,i) => {
@@ -72,9 +75,6 @@ export default async () => {
       ...record,
       address,
       link,
-    }
-    if (!fs.existsSync(outputFile)) {
-      fs.writeFileSync(outputFile, ["address", "owner", "ownerSince", "serial", "link"].join(",") + "\n")
     }
     fs.appendFileSync(outputFile, [address, '"' + record.owner + '"', record.ownerSince, record.serial, link].join(",") + "\n")
   }))
